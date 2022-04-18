@@ -118,3 +118,6 @@ int main()
         }
     }
 }
+
+// Template Method
+// NVI : None Virtual Interface
