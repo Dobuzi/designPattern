@@ -1,15 +1,18 @@
-// 1_Ãß»óÅ¬·¡½º1.cpp - 10page
-class Shape
+// 1_ï¿½ß»ï¿½Å¬ï¿½ï¿½ï¿½ï¿½1.cpp - 10page
+class Shape // Abstract Class : one or more pure virtual function
 {
 public:
-	virtual void Draw() = 0;
-							
+	virtual void Draw() = 0; // pure virtual function : No detail, just declare
 };
+
 class Rect : public Shape
 {
+	void Draw() override {}
 };
+
 int main()
 {
-	Shape s;
+	// Shape s;
+	Shape* p;
 	Rect  r;
 }

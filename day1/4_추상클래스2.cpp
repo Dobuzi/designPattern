@@ -1,4 +1,4 @@
-//1_Ãß»óÅ¬·¡½º2.cpp
+//1_ï¿½ß»ï¿½Å¬ï¿½ï¿½ï¿½ï¿½2.cpp
 #include <iostream>
 
 
@@ -8,10 +8,17 @@ public:
 	void Take() { std::cout << "Take Picture" << std::endl; }
 };
 
+class HDCamera
+{
+	public:
+		void Take() { std::cout << "Take HD Picture" << std::endl; }
+};
+
 class People
 {
 public:	
 	void UseCamera(Camera* p) { p->Take(); }
+	void UseCamera(HDCamera* p) { p->Take(); }
 };
 
 int main()
@@ -19,6 +26,8 @@ int main()
 	People p;
 	Camera c;
 	p.UseCamera(&c);
+	HDCamera hc;
+	p.UseCamera(&hc);
 }
 
 

@@ -1,13 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <exception>
+
+struct NotImplemented: public std::exception {
+    // std::cout << "You dont make the right way." << std::endl;
+};
 
 class Shape
 {
     protected:
-        virtual void draw_imp()
-        {
-            std::cout << "draw shape" << std::endl;
-        }
+        virtual void draw_imp() = 0;
 
     public:
         Shape() {}
@@ -20,12 +22,10 @@ class Shape
             std::cout << "mutex unlock" << std::endl;
         }
 
-        virtual Shape* clone() // prototype pattern: copy the origin object to create the othere object
-        {
-            Shape* p = new Shape(*this);
+        // virtual Shape* clone() = 0; // prototype pattern: copy the origin object to create the othere object
 
-            return p;
-        }
+        // If the making clone is not necessary and it is not allowed use clone, then use this way
+        virtual Shape* clone() { throw NotImplemented(); }
 };
 
 class Rect : public Shape
@@ -92,6 +92,7 @@ class Triangle : public Shape
 
 int main()
 {
+    std::cout << "Run the program" << std::endl;
     std::vector<Shape*> v;
 
     while (1)
