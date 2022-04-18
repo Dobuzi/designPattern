@@ -1,10 +1,14 @@
 #include <iostream>
+#define interface struct
 
 // loosely coupling : expandable
-class ICamera
+// class ICamera
+// struct ICamera
+interface ICamera
 {
     public:
         virtual void take() = 0;
+        virtual ~ICamera() {}
 };
 
 class People

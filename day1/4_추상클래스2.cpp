@@ -29,8 +29,3 @@ int main()
 	HDCamera hc;
 	p.UseCamera(&hc);
 }
-
-
-
-
-
