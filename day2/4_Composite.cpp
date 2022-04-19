@@ -2,14 +2,44 @@
 #include <vector>
 #include <string>
 
+struct NotImplemented : public std::exception {};
 
-class File 
+class Item
 {
+	std::string title;
+
+	public:
+		int size;
+		Item(const std::string& title, int size = 0) : title(title), size(size) {}
+		virtual ~Item() {}
+		virtual void addItem(Item* i) { throw NotImplemented(); }
+		virtual int getSize() { throw NotImplemented(); }
 };
 
-class Folder
+class File : public Item
 {
+	public:
+		File(const std::string& title, int size) : Item(title, size) {}
+		~File() {}
+		int getSize() override { return size; }
+};
 
+class Folder : public Item
+{
+	std::vector<Item*> v;
+	public:
+		Folder(const std::string& title) : Item(title) {}
+		~Folder() {}
+		void addItem(Item* i) override { v.push_back(i); }
+		int getSize() override
+		{
+			int sz = 0;
+			for (int i = 0; i < v.size(); i++)
+			{
+				sz += v[i]->getSize();
+			}
+			return sz;
+		}
 };
 
 int main()
@@ -27,8 +57,8 @@ int main()
 	fo1->addItem(f1);
 	root->addItem(f2);
 
-	// ÆÄÀÏÀº ÀÚ½Å¸¸ÀÇ Å©±â´Â ÀÖ½À´Ï´Ù.
-	// Æú´õ´Â ÀÚ½Å¸¸ÀÇ Å©±â´Â ¾øÁö¸¸ Å©±â¸¦ ±¸ÇÒ¼ö ÀÖ½À´Ï´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½Å¸ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½Å¸ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½â¸¦ ï¿½ï¿½ï¿½Ò¼ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
 	std::cout << f2->getSize() << std::endl; // 20
 	std::cout << fo1->getSize() << std::endl; // 10
 	std::cout << root->getSize() << std::endl; // 30
