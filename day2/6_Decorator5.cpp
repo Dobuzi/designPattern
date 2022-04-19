@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <string>
 
 class FileStream
 {
@@ -11,14 +12,17 @@ public:
 	}
 	~FileStream() { fclose(file); }
 
-	void Write(const char* buff) 
+	void Write(const std::string& buff) 
 	{
-		printf("%s ¾²±â\n", buff);
+		std::cout << "write " << buff << std::endl;
 	}
 };
 
 int main()
 {
-	FILE* f = fopen("a.txt", "wt");
-	fclose(f);
+	// FILE* f = fopen("a.txt", "wt");
+	// fclose(f);
+
+	FileStream fs("a.txt");
+	fs.Write("hello");
 }

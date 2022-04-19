@@ -6,6 +6,7 @@ design pattern with cpp
 
 ```mermaid
 graph TD
-A --> B
-A --> D
+A[Item] --> B[Spaceship]
+A --> C[Left Missile]
+A --> D[Right Missile]
 ```
