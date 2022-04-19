@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include <conio.h>
+// #include <conio.h>
+#include <curses.h>
 
 class Edit
 {
@@ -12,7 +13,7 @@ public:
 
 		while (1)
 		{
-			char c = _getch(); 
+			char c = getch(); 
 
 			if (c == 13) break;
 

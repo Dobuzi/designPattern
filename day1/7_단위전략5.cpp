@@ -1,15 +1,19 @@
-
-// STL 의 원리
-template<typename T>
+#include <memory>
+// STL 占쏙옙 占쏙옙占쏙옙
+template<typename T, typename Alloc = std::allocator<T> >
 class vector
 {
+	Alloc ax;
 public:
 	void resize(int n)
 	{
-		// 버퍼 크기가 부족해서 다시 할당하려고 합니다.
-		// 어떻게 할당할까요 ?
-		// C++에서는 메모리를 할당하는 방법이 아주 많이 있습니다.
-		// new / malloc / system call / windows api/ 풀링 
+		T* buff = ax.allocate(n);
+
+		ax.deallocate(buff, n);
 	}
 };
 
+int main()
+{
+	
+}

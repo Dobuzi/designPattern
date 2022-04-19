@@ -1,17 +1,19 @@
 #include <iostream>
 #include <vector>
-#include <allocators> // C++ Ç¥ÁØ ¸Þ¸ð¸® ÇÒ´ç±â
+// #include <allocators> // C++ Ç¥ï¿½ï¿½ ï¿½Þ¸ï¿½ ï¿½Ò´ï¿½ï¿½
+#include <memory>
 
 int main()
 {
-	// ¸Þ¸ð¸® ÇÒ´ç ¹æ¹ý
-	// 1. new / delete ¸¦ Á÷Á¢ »ç¿ë
+	// ï¿½Þ¸ï¿½ ï¿½Ò´ï¿½ ï¿½ï¿½ï¿½
+	// 1. new / delete ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	int* p1 = new int[10];
 	delete[] p1;
 
-	// 2. allocator »ç¿ë
-	std::allocator<int> ax; 
+	// 2. allocator ï¿½ï¿½ï¿½
+	std::allocator<int> ax;
 
+	int* p = ax.allocate(10);
 	ax.deallocate(p, 10); 
 
 }

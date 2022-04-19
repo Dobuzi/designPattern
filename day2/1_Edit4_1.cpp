@@ -38,9 +38,29 @@ public:
 	}
 };
 
+class LimitDigitValidator : public IValidator
+{
+	int max;
+
+	public:
+		LimitDigitValidator(int value) : max(value) {}
+
+		bool validate(const std::string& data, char c) override
+		{
+			return data.size() < max && isdigit(c);
+		}
+		
+		bool iscomplete(const std::string& data) override
+		{
+			return data.size() == max;
+		}
+};
+
 int main()
 {
 	Edit e;
+	LimitDigitValidator v(5);
+	e.setValidator(&v);
 	while (1)
 	{
 		std::cout << e.getData() << std::endl;

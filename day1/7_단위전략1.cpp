@@ -3,10 +3,15 @@ template<typename T> class List
 public:
 	void push_front(const T& a)
 	{
-		//......
+		lock();
+
+		unlock();
 	}
+
+	virtual void lock() {}
+	virtual void unlock() {}
 };
-List<int> st; // Àü¿ªº¯¼ö´Â ¸ÖÆ¼½º·¹µå¿¡ ¾ÈÀüÇÏÁö ¾Ê½À´Ï´Ù.
+List<int> st; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½å¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
 
 int main()
 {
