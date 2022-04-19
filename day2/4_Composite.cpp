@@ -9,17 +9,18 @@ class Item
 	std::string title;
 
 	public:
-		int size;
-		Item(const std::string& title, int size = 0) : title(title), size(size) {}
+		Item(const std::string& title) : title(title) {}
 		virtual ~Item() {}
 		virtual void addItem(Item* i) { throw NotImplemented(); }
-		virtual int getSize() { throw NotImplemented(); }
+		virtual int getSize() = 0;
 };
 
 class File : public Item
 {
+	int size;
+
 	public:
-		File(const std::string& title, int size) : Item(title, size) {}
+		File(const std::string& title, int size) : Item(title), size(size) {}
 		~File() {}
 		int getSize() override { return size; }
 };
@@ -33,7 +34,7 @@ class Folder : public Item
 		void addItem(Item* i) override { v.push_back(i); }
 		int getSize() override
 		{
-			int sz = 0;
+			size_t sz = 0;
 			for (int i = 0; i < v.size(); i++)
 			{
 				sz += v[i]->getSize();
