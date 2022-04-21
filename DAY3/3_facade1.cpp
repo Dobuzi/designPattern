@@ -6,14 +6,14 @@
 
 int main()
 {
-	// 1. Ёвф╝©Же╘ ╤Сюл╨Й╥╞╦╝ цй╠Бх╜
-	WSADATA w;
-	WSAStartup(0x202, &w);
+	// // 1. О©╫О©╫ф╝О©╫О©╫е╘ О©╫О©╫О©╫л╨Й╥╞О©╫О©╫ О©╫й╠О©╫х╜
+	// WSADATA w;
+	// WSAStartup(0x202, &w);
 
-	// 2. ╪рдо ╩Щ╪╨
-	int sock = socket(PF_INET, SOCK_STREAM, 0); // TCP ╪рдо
+	// 2. О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+	int sock = socket(PF_INET, SOCK_STREAM, 0); // TCP О©╫О©╫О©╫О©╫
 
-	// 3. ╪рдо©║ аж╪р аЖа╓
+	// 3. О©╫О©╫О©╫о©О©╫ О©╫ж╪О©╫ О©╫О©╫О©╫О©╫
 	struct sockaddr_in addr = { 0 };
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(4000);
@@ -21,15 +21,15 @@ int main()
 
 	bind(sock, (SOCKADDR*)&addr, sizeof(addr));
 
-	// 4. ╪рдою╩ ╢К╠Б ╩Себ╥н╨╞╟Ф
+	// 4. О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫б╥н╨О©╫О©╫О©╫
 	listen(sock, 5);
 
-	// 5. е╛╤Сюл╬Пф╝╟║ а╒╪сгр╤╖ ╠НаЖ ╢К╠Б
+	// 5. е╛О©╫О©╫О©╫л╬О©╫ф╝О©╫О©╫ О©╫О©╫О©╫О©╫О©╫р╤О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫
 	struct sockaddr_in addr2 = { 0 };
 	int sz = sizeof(addr2);
 
 	accept(sock, (SOCKADDR*)&addr2, &sz);
 
-	// 6. socket ╤Сюл╨Й╥╞╦╝ cleanup
+	// 6. socket О©╫О©╫О©╫л╨Й╥╞О©╫О©╫ cleanup
 	WSACleanup();
 }

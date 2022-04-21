@@ -17,12 +17,12 @@
 #undef UNICODE
 #endif
 
-// #include <Windows.h>
+#include <Windows.h>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <ctime>
-// #include <tchar.h>
+#include <tchar.h>
 #include <map>
 #include <type_traits>
 using namespace std;
@@ -110,9 +110,9 @@ std::string remove_calling_convention(std::string name)
 
 #ifdef USING_GUI
 
-// #ifndef _MSC_VER
-// #	error  "error, must be compiled using cl(vc++) compiler"
-// #endif
+#ifndef _MSC_VER
+#	error  "error, must be compiled using cl(vc++) compiler"
+#endif
 
 #pragma comment(lib, "kernel32.lib")
 #pragma comment(lib, "user32.lib")
@@ -128,13 +128,11 @@ namespace cppmaster
 			++n;
 			return n;
 		}
-		// void ec_set_cursor(short x, short y)
-		// {
-		// 	COORD coord = { x, y };
-		// 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-		// }
-		// move(x, y);
-
+		void ec_set_cursor(short x, short y)
+		{
+			COORD coord = { x, y };
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+		}
 		class Color
 		{
 			int _red, _green, _blue;
@@ -162,15 +160,15 @@ namespace cppmaster
 	}
 	namespace message
 	{
-		// void ec_process_message()
-		// {
-		// 	MSG msg;
-		// 	while (GetMessage(&msg, 0, 0, 0))
-		// 	{
-		// 		TranslateMessage(&msg);
-		// 		DispatchMessage(&msg);
-		// 	}
-		// }
+		void ec_process_message()
+		{
+			MSG msg;
+			while (GetMessage(&msg, 0, 0, 0))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
 
 #ifdef AUTO_MESSAGE_LOOP
 		class __GlobalMessageLoop
@@ -186,93 +184,93 @@ namespace cppmaster
 		typedef void(*ec_TIMER_HANDLER)(int);
 		map<int, ec_TIMER_HANDLER> timer_map;
 
-		// int CALLBACK _InternalTimerProcedure(HWND hwnd, UINT msg, UINT_PTR id, DWORD)
-		// {
-		// 	if (timer_map[id])
-		// 		timer_map[id](id);
-		// 	return 0;
-		// }
+		int CALLBACK _InternalTimerProcedure(HWND hwnd, UINT msg, UINT_PTR id, DWORD)
+		{
+			if (timer_map[id])
+				timer_map[id](id);
+			return 0;
+		}
 
-		// int ec_set_timer(int ms, ec_TIMER_HANDLER handler)
-		// {
-		// 	int id = SetTimer(0, 0, ms, (TIMERPROC)_InternalTimerProcedure);
-		// 	timer_map[id] = handler;
-		// 	return id;
-		// }
+		int ec_set_timer(int ms, ec_TIMER_HANDLER handler)
+		{
+			int id = SetTimer(0, 0, ms, (TIMERPROC)_InternalTimerProcedure);
+			timer_map[id] = handler;
+			return id;
+		}
 
-		// void ec_kill_timer(int id)
-		// {
-		// 	KillTimer(0, id);
-		// 	timer_map.erase(id);
-		// }
+		void ec_kill_timer(int id)
+		{
+			KillTimer(0, id);
+			timer_map.erase(id);
+		}
 	}
 	namespace gui
 	{
 		typedef int(*ec_MESSAGE_HANDLER)(int, int, int, int);
 
-		// map<HWND, ec_MESSAGE_HANDLER> proc_map;
+		map<HWND, ec_MESSAGE_HANDLER> proc_map;
 
-		// LRESULT CALLBACK _InternalMessageProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
-		// {
-		// 	if (msg == WM_CREATE)
-		// 	{
-		// 		ec_MESSAGE_HANDLER handler = (ec_MESSAGE_HANDLER)((LPCREATESTRUCT)lp)->lpCreateParams;
-		// 		proc_map[hwnd] = handler;
-		// 	}
+		LRESULT CALLBACK _InternalMessageProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+		{
+			if (msg == WM_CREATE)
+			{
+				ec_MESSAGE_HANDLER handler = (ec_MESSAGE_HANDLER)((LPCREATESTRUCT)lp)->lpCreateParams;
+				proc_map[hwnd] = handler;
+			}
 
-		// 	if (proc_map[hwnd])
-		// 		proc_map[hwnd]((int)hwnd, msg, wp, lp);
+			if (proc_map[hwnd])
+				proc_map[hwnd]((int)hwnd, msg, wp, lp);
 
-		// 	if (msg == WM_DESTROY)
-		// 	{
-		// 		ExitProcess(0);
-		// 	}
-		// 	return DefWindowProc(hwnd, msg, wp, lp);
-		// }
+			if (msg == WM_DESTROY)
+			{
+				ExitProcess(0);
+			}
+			return DefWindowProc(hwnd, msg, wp, lp);
+		}
 
 		//----------------------------------------------------------------------------------------------
-		// int ec_make_window(ec_MESSAGE_HANDLER proc, string title = "S/W Design Pattern(C++)")
-		// {
-		// 	WNDCLASS wc = { 0 };
-		// 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-		// 	wc.hCursor = LoadCursor(0, IDC_ARROW);
-		// 	wc.hIcon = LoadIcon(0, IDI_WINLOGO);
-		// 	wc.hInstance = (HINSTANCE)GetModuleHandle(0);
-		// 	wc.lpfnWndProc = _InternalMessageProcedure;
+		int ec_make_window(ec_MESSAGE_HANDLER proc, string title = "S/W Design Pattern(C++)")
+		{
+			WNDCLASS wc = { 0 };
+			wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+			wc.hCursor = LoadCursor(0, IDC_ARROW);
+			wc.hIcon = LoadIcon(0, IDI_WINLOGO);
+			wc.hInstance = (HINSTANCE)GetModuleHandle(0);
+			wc.lpfnWndProc = _InternalMessageProcedure;
 
-		// 	ostringstream oss;
-		// 	oss << "ec_GUI" << basic::ec_next_int();
+			ostringstream oss;
+			oss << "ec_GUI" << basic::ec_next_int();
 
-		// 	string cname = oss.str();
-		// 	wc.lpszClassName = cname.c_str();
-		// 	RegisterClass(&wc);
+			string cname = oss.str();
+			wc.lpszClassName = cname.c_str();
+			RegisterClass(&wc);
 
-		// 	HWND hwnd = CreateWindow(cname.c_str(), title.c_str(),
-		// 		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT,
-		// 		0, 0, 0, 0, (void*)proc);
+			HWND hwnd = CreateWindow(cname.c_str(), title.c_str(),
+				WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT,
+				0, 0, 0, 0, (void*)proc);
 
-		// 	ShowWindow(hwnd, SW_SHOW);
-		// 	return (int)hwnd;
-		// }
+			ShowWindow(hwnd, SW_SHOW);
+			return (int)hwnd;
+		}
 
-		// void ec_set_window_rect(int handle, int x, int y, int w, int h)
-		// {
-		// 	MoveWindow((HWND)handle, x, y, w, h, TRUE);
-		// }
+		void ec_set_window_rect(int handle, int x, int y, int w, int h)
+		{
+			MoveWindow((HWND)handle, x, y, w, h, TRUE);
+		}
 
-		// void ec_add_child(int parent_handle, int child_handle)
-		// {
-		// 	SetWindowLong((HWND)child_handle, GWL_STYLE, WS_VISIBLE | WS_BORDER | WS_CHILD);
-		// 	SetParent((HWND)child_handle, (HWND)parent_handle);
-		// }
+		void ec_add_child(int parent_handle, int child_handle)
+		{
+			SetWindowLong((HWND)child_handle, GWL_STYLE, WS_VISIBLE | WS_BORDER | WS_CHILD);
+			SetParent((HWND)child_handle, (HWND)parent_handle);
+		}
 
-		// void ec_set_window_color(int handle, const basic::Color& color)
-		// {
-		// 	HBRUSH brush = CreateSolidBrush(RGB(color.red(), color.green(), color.blue()));
-		// 	HBRUSH old = (HBRUSH)SetClassLong((HWND)handle, GCL_HBRBACKGROUND, (LONG)brush);
-		// 	DeleteObject(old);
-		// 	InvalidateRect((HWND)handle, 0, TRUE);
-		// }
+		void ec_set_window_color(int handle, const basic::Color& color)
+		{
+			HBRUSH brush = CreateSolidBrush(RGB(color.red(), color.green(), color.blue()));
+			HBRUSH old = (HBRUSH)SetClassLong((HWND)handle, GCL_HBRBACKGROUND, (LONG)brush);
+			DeleteObject(old);
+			InvalidateRect((HWND)handle, 0, TRUE);
+		}
 
 	}
 	namespace module
@@ -283,44 +281,44 @@ namespace cppmaster
 #define IOEXPORT 
 #endif
 
-		// void* ec_load_module(string path)
-		// {
-		// 	return reinterpret_cast<void*>(LoadLibraryA(path.c_str()));
-		// }
-		// void ec_unload_module(void* p)
-		// {
-		// 	FreeLibrary((HMODULE)p);
-		// }
-		// void* ec_get_function_address(void* module, string func)
-		// {
-		// 	return reinterpret_cast<void*>(GetProcAddress((HMODULE)module, func.c_str()));
-		// }
+		void* ec_load_module(string path)
+		{
+			return reinterpret_cast<void*>(LoadLibraryA(path.c_str()));
+		}
+		void ec_unload_module(void* p)
+		{
+			FreeLibrary((HMODULE)p);
+		}
+		void* ec_get_function_address(void* module, string func)
+		{
+			return reinterpret_cast<void*>(GetProcAddress((HMODULE)module, func.c_str()));
+		}
 	}
 	namespace file
 	{
 		typedef int(*PFENUMFILE)(string, void*);
 
-		// void ec_enum_files(string path, string filter, PFENUMFILE f, void* param)
-		// {
-		// 	BOOL b = SetCurrentDirectory(path.c_str());
+		void ec_enum_files(string path, string filter, PFENUMFILE f, void* param)
+		{
+			BOOL b = SetCurrentDirectory(path.c_str());
 
-		// 	if (b == false)
-		// 	{
-		// 		cout << "[DEBUG] " << path.c_str() << " directory does not exit" << endl;
-		// 		return;
-		// 	}
-		// 	WIN32_FIND_DATA wfd = { 0 };
-		// 	HANDLE h = ::FindFirstFile(filter.c_str(), &wfd);
-		// 	do
-		// 	{
-		// 		if (!(wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && !(wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
-		// 		{
-		// 			if (f(wfd.cFileName, param) == 0) break;
-		// 		}
-		// 	} while (FindNextFile(h, &wfd));
+			if (b == false)
+			{
+				cout << "[DEBUG] " << path.c_str() << " directory does not exit" << endl;
+				return;
+			}
+			WIN32_FIND_DATA wfd = { 0 };
+			HANDLE h = ::FindFirstFile(filter.c_str(), &wfd);
+			do
+			{
+				if (!(wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && !(wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
+				{
+					if (f(wfd.cFileName, param) == 0) break;
+				}
+			} while (FindNextFile(h, &wfd));
 
-		// 	FindClose(h);
-		// }
+			FindClose(h);
+		}
 	}
 
 	namespace ipc
@@ -329,43 +327,43 @@ namespace cppmaster
 
 		IPC_SERVER_HANDLER _proxyServerHandler;
 
-		// LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-		// {
-		// 	if (msg >= WM_USER)
-		// 		return _proxyServerHandler(msg - WM_USER, wParam, lParam);
+		LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+		{
+			if (msg >= WM_USER)
+				return _proxyServerHandler(msg - WM_USER, wParam, lParam);
 
-		// 	switch (msg)
-		// 	{
-		// 	case WM_DESTROY:
-		// 		PostQuitMessage(0);
-		// 		return 0;
-		// 	}
-		// 	return DefWindowProc(hwnd, msg, wParam, lParam);
-		// }
+			switch (msg)
+			{
+			case WM_DESTROY:
+				PostQuitMessage(0);
+				return 0;
+			}
+			return DefWindowProc(hwnd, msg, wParam, lParam);
+		}
 
-		// HWND MakeWindow(string name, int show)
-		// {
-		// 	HINSTANCE hInstance = GetModuleHandle(0);
-		// 	WNDCLASS wc;
-		// 	wc.cbClsExtra = 0;
-		// 	wc.cbWndExtra = 0;
-		// 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-		// 	wc.hCursor = LoadCursor(0, IDC_ARROW);
-		// 	wc.hIcon = LoadIcon(0, IDI_APPLICATION);
-		// 	wc.hInstance = hInstance;
-		// 	wc.lpfnWndProc = WndProc;
-		// 	wc.lpszClassName = _T("First");
-		// 	wc.lpszMenuName = 0;
-		// 	wc.style = 0;
+		HWND MakeWindow(string name, int show)
+		{
+			HINSTANCE hInstance = GetModuleHandle(0);
+			WNDCLASS wc;
+			wc.cbClsExtra = 0;
+			wc.cbWndExtra = 0;
+			wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+			wc.hCursor = LoadCursor(0, IDC_ARROW);
+			wc.hIcon = LoadIcon(0, IDI_APPLICATION);
+			wc.hInstance = hInstance;
+			wc.lpfnWndProc = WndProc;
+			wc.lpszClassName = _T("First");
+			wc.lpszMenuName = 0;
+			wc.style = 0;
 
-		// 	RegisterClass(&wc);
+			RegisterClass(&wc);
 
-		// 	HWND hwnd = CreateWindowEx(0, _T("First"), name.c_str(), WS_OVERLAPPEDWINDOW,
-		// 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 0, 0, hInstance, 0);
+			HWND hwnd = CreateWindowEx(0, _T("First"), name.c_str(), WS_OVERLAPPEDWINDOW,
+				CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 0, 0, hInstance, 0);
 
-		// 	ShowWindow(hwnd, show);
-		// 	return hwnd;
-		// }
+			ShowWindow(hwnd, show);
+			return hwnd;
+		}
 
 
 		void ProcessMessage(IPC_SERVER_HANDLER handler)

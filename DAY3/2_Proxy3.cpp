@@ -6,14 +6,24 @@
 // Stub : Call the function with arrived operation code
 // We call it proxy-stub communication
 
-class CalcProxy
+// RPC (Remote Procedure Call) : Call the function in other process
+
+struct ICalc
+{
+    virtual int Add(int a, int b) = 0;
+    virtual int Sub(int a, int b) = 0;
+
+    virtual ~ICalc() {}
+};
+
+class CalcProxy : public ICalc
 {
 	int server;
 	public:
 	CalcProxy() { server = ec_find_server("Calc"); }
 
-	int Add(int a, int b) { return ec_send_server(server, 1, a, b); }
-	int Sub(int a, int b) { return ec_send_server(server, 2, a, b); }
+	int Add(int a, int b) override { return ec_send_server(server, 1, a, b); }
+	int Sub(int a, int b) override { return ec_send_server(server, 2, a, b); }
 };
 
 int main()

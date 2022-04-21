@@ -4,24 +4,25 @@
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
 
-
+// SRP (Single Responsibility Principle)
+// One Class, One Responsibility
 
 class NetworkInit
 {
 public:
 	NetworkInit()
 	{
-		// 1. ³×Æ®¿öÅ© ¶óÀÌºê·¯¸® ÃÊ±âÈ­
+		// 1. ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ ï¿½Ê±ï¿½È­
 		WSADATA w;
 		WSAStartup(0x202, &w);
 	}
 	~NetworkInit()
 	{
-		// 6. socket ¶óÀÌºê·¯¸® cleanup
+		// 6. socket ï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ cleanup
 		WSACleanup();
 	}
 };
-// IP ÁÖ¼Ò¸¦ °ü¸®ÇÏ´Â Å¬·¡½º
+// IP ï¿½Ö¼Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 class IPAddress
 {
 	SOCKADDR_IN addr;
@@ -38,7 +39,7 @@ public:
 	}
 };
 
-// Socket ÀÛ¾÷À» Ã¥ÀÓÁö´Â Å¬·¡½º
+// Socket ï¿½Û¾ï¿½ï¿½ï¿½ Ã¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 class Socket
 {
 	int sock;
@@ -64,7 +65,7 @@ int main()
 {
 	NetworkInit init;
 
-	Socket sock(SOCK_STREAM); // TCP ¼­¹ö
+	Socket sock(SOCK_STREAM); // TCP ï¿½ï¿½ï¿½ï¿½
 
 	IPAddress addr("127.0.0.1", 4000);
 	sock.Bind(&addr);
