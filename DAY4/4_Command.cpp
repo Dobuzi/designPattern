@@ -22,9 +22,73 @@ public:
 	void Draw() override { std::cout << "Draw Circle" << std::endl; }
 };
 
+struct ICommand
+{
+	virtual void Execute() = 0;
+	virtual bool CanUndo()	{ return false; }
+	virtual void Undo() 	{}
+	virtual ~ICommand()		{}
+};
+
+class AddRectCommand : public ICommand
+{
+	std::vector<Shape*>& v;
+	public:
+	AddRectCommand(std::vector<Shape*>& v) : v(v) {}
+	void Execute() override { v.push_back(new Rect); }
+	bool CanUndo() override { return true; }
+	void Undo() override
+	{
+		Shape* p = v.back();
+		v.pop_back();
+		delete p;
+	}
+};
+
+class AddCircleCommand : public ICommand
+{
+	std::vector<Shape*>& v;
+	public:
+	AddCircleCommand(std::vector<Shape*>& v) : v(v) {}
+	void Execute() override { v.push_back(new Circle); }
+	bool CanUndo() override { return true; }
+	void Undo() override
+	{
+		Shape* p = v.back();
+		v.pop_back();
+		delete p;
+	}
+};
+
+class DrawCommand : public ICommand
+{
+	std::vector<Shape*>& v;
+	public:
+	DrawCommand(std::vector<Shape*>& v) : v(v) {}
+	void Execute() override
+	{
+		for (auto p : v)
+			p->Draw();
+	}
+	bool CanUndo() override { return true; }
+	void Undo() override
+	{
+		system("clear");
+	}
+};
+
+#define COMMAND(command)	\
+pCmd = new command(v);		\
+pCmd->Execute();			\
+undo_stack.push(pCmd);		\
+
 int main()
 {
 	std::vector<Shape*> v;
+
+	std::stack<ICommand*> undo_stack;
+
+	ICommand* pCmd = nullptr;
 
 	while (1)
 	{
@@ -32,16 +96,25 @@ int main()
 		std::cin >> cmd;
 		if (cmd == 1) 
 		{
-			v.push_back(new Rect);
+			COMMAND(AddRectCommand)
 		}
 		else if (cmd == 2) 
 		{
-			v.push_back(new Circle);
+			COMMAND(AddCircleCommand)
 		}
 		else if (cmd == 9)
 		{
-			for (auto p : v)
-				p->Draw();
+			COMMAND(DrawCommand)
+		}
+		else if (cmd == 0)
+		{
+			if ( !undo_stack.empty() )
+			{
+				pCmd = undo_stack.top();
+				undo_stack.pop();
+				if (pCmd->CanUndo()) pCmd->Undo();
+				delete pCmd;
+			}
 		}
 	}
 }

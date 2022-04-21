@@ -10,6 +10,11 @@ public:
 	virtual void draw() = 0;
 };
 
+class EditableImage : public Shape
+{
+
+};
+
 class Image : public Shape
 {
 	std::string image_url;

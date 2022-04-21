@@ -1,6 +1,6 @@
 #include <iostream>
-#include <thread> // 스레드 라이브러리
-#include <chrono> // 시간 관련 라이브러리
+#include <thread>
+#include <chrono>
 
 class Cursor
 {
@@ -32,10 +32,8 @@ int main()
 {
 	std::thread t1(&Cursor::getInstance);
 	
-	// 1초 뒤에
 	std::this_thread::sleep_for(std::chrono::seconds(1)); 
 
-	// 2번째 스레드 시작
 	std::thread t2(&Cursor::getInstance);
 
 	t1.join();

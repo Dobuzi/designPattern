@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "Helper.h"
+#include "helper.h"
 
 class Shape
 {
@@ -20,8 +20,6 @@ public:
 	void Draw() override { std::cout << "Draw Circle" << std::endl; }
 };
 
-// 도형을 만드는 팩토리
-
 class ShapeFactory
 {
 	MAKE_SINGLETON(ShapeFactory)
@@ -40,13 +38,18 @@ int main()
 {
 	std::vector<Shape*> v;
 
+	ShapeFactory& factory = ShapeFactory::getInstance();
+
 	while (1)
 	{
 		int cmd;
 		std::cin >> cmd;
 
-		if (cmd == 1) v.push_back(new Rect);
-		else if (cmd == 2) v.push_back(new Circle);
+		if (cmd >= 1 && cmd <= 7)
+		{
+			Shape* p = factory.Create(cmd);
+			if ( p != nullptr ) v.push_back(p);
+		}
 		else if (cmd == 9)
 		{
 			for (int i = 0; i < v.size(); i++)

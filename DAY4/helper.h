@@ -12,5 +12,9 @@ public:										\
 	}										\
 public:										\
 	classname(classname&) = delete;			\
-	void operator=(classname&) = delete;	
+	void operator=(classname&) = delete;	\
+
+#define DECLARE_SHAPE(classname)                    \
+static Shape* Create() { return new classname; }	\
+static AutoRegister ar;								\
 
