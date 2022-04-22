@@ -1,8 +1,9 @@
-// 3_Ãß»óÆÑÅä¸® - 147
+// 3_ï¿½ß»ï¿½ï¿½ï¿½ï¿½ä¸® - 147
+#include <cstring>
 #include <iostream>
 using namespace std;
 
-// ¸ðµç Á¾·ùÀÇ ÄÁÆ®·ÑÀº °øÅëÀÇ ±â¹Ý Å¬·¡½º ÇÊ¿ä
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 struct IButton
 {
 	virtual void Draw() = 0;
@@ -34,15 +35,23 @@ struct OSXEdit : public IEdit
 };
 //-----------------
 
-//  style º°·Î °¢ ÄÜÆ®·ÑÀ» ¸¸µå´Â °øÀå
-class WinFactory 
+struct IFactory
+{
+	virtual IButton* CreateButton() = 0;
+	virtual IEdit*   CreateEdit()   = 0;
+	virtual ~IFactory() {}
+};
+
+//  style ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+class WinFactory : public IFactory
 {
 public:
 	IButton* CreateButton() { return new WinButton; }
 	IEdit*   CreateEdit()   { return new WinEdit; }
 	virtual ~WinFactory() {}
 };
-class OSXFactory 
+
+class OSXFactory : public IFactory
 {
 public:
 	IButton* CreateButton() { return new OSXButton; }
@@ -50,16 +59,15 @@ public:
 	virtual ~OSXFactory() {}
 };
 
-
 int main(int argc, char** argv)
 {
-	? factory;
-	if (strcmp(argv[0], "-style:OSX") == 0)
+	IFactory* factory;
+	if (strcmp(argv[1], "-style:OSX") == 0)
 		factory = new OSXFactory;
 	else
 		factory = new WinFactory;
 
-	// ÄÁÆ®·ÑÀÌ ÇÊ¿äÇÏ¸é °øÀåÀ» »ç¿ëÇØ¼­ »ý¼º
+	// ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 	IButton* btn = factory->CreateButton();
 	btn->Draw();
 }

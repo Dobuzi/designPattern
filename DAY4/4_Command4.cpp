@@ -30,13 +30,12 @@ struct ICommand
 	virtual ~ICommand()		{}
 };
 
-template<typename T>
 class AddCommand : public ICommand
 {
     std::vector<Shape*>& v;
 	public:
 	AddCommand(std::vector<Shape*>& v) : v(v) {}
-	void Execute() override { v.push_back( new T ); }
+	void Execute() override { v.push_back( CreateShape() ); }
 	bool CanUndo() override { return true; }
 	void Undo() override
 	{
@@ -44,6 +43,22 @@ class AddCommand : public ICommand
 		v.pop_back();
 		delete p;
 	}
+
+    virtual Shape* CreateShape() = 0;
+};
+
+class AddRectCommand : public AddCommand
+{
+	public:
+	AddRectCommand(std::vector<Shape*>& v) : AddCommand(v) {}
+	Shape* CreateShape() override { return new Rect; }
+};
+
+class AddCircleCommand : public AddCommand
+{
+	public:
+	AddCircleCommand(std::vector<Shape*>& v) : AddCommand(v) {}
+	Shape* CreateShape() override { return new Circle; }
 };
 
 class DrawCommand : public ICommand
@@ -63,6 +78,18 @@ class DrawCommand : public ICommand
 	}
 };
 
+class MacroCommand : public ICommand
+{
+	std::vector<ICommand*> v;
+	public:
+	void addCommand(ICommand* p) { v.push_back(p); }
+	void Execute()
+	{
+		for (auto p : v)
+			p->Execute();
+	}
+};
+
 #define COMMAND(command)	\
 pCmd = new command(v);		\
 pCmd->Execute();			\
@@ -71,8 +98,18 @@ undo_stack.push(pCmd);		\
 int main()
 {
 	std::vector<Shape*> v;
+
 	std::stack<ICommand*> undo_stack;
+
 	ICommand* pCmd = nullptr;
+
+	MacroCommand* mc1 = new MacroCommand;
+	mc1->addCommand(new AddRectCommand(v));
+	mc1->addCommand(new AddCircleCommand(v));
+
+	MacroCommand* mc2 = new MacroCommand;
+	mc2->addCommand(mc1);
+	mc2->Execute();
 
 	while (1)
 	{
@@ -80,11 +117,11 @@ int main()
 		std::cin >> cmd;
 		if (cmd == 1) 
 		{
-			COMMAND(AddCommand<Rect>)
+			COMMAND(AddRectCommand)
 		}
 		else if (cmd == 2) 
 		{
-			COMMAND(AddCommand<Circle>)
+			COMMAND(AddCircleCommand)
 		}
 		else if (cmd == 9)
 		{
@@ -100,5 +137,11 @@ int main()
 				delete pCmd;
 			}
 		}
+		else if (cmd == 8)
+		{
+
+		}
 	}
 }
+
+

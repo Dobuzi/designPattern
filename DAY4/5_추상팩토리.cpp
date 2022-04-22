@@ -1,8 +1,9 @@
-// 3_Ãß»óÆÑÅä¸® - 147
+// 3_ï¿½ß»ï¿½ï¿½ï¿½ï¿½ä¸® - 147
+#include <cstring>
 #include <iostream>
 using namespace std;
 
-// ¸ðµç Á¾·ùÀÇ ÄÁÆ®·ÑÀº °øÅëÀÇ ±â¹Ý Å¬·¡½º ÇÊ¿ä
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 struct IButton
 {
 	virtual void Draw() = 0;
@@ -35,11 +36,13 @@ struct OSXEdit : public IEdit
 
 int main(int argc, char** argv)
 {
-	? btn;
-	if (strcmp(argv[0], "-style:OSX") == 0)
+	IButton* btn;
+	if (strcmp(argv[1], "-style:OSX") == 0)
 		btn = new OSXButton;
 	else
 		btn = new WinButton;
+
+	btn->Draw();
 }
 
 

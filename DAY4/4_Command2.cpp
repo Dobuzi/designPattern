@@ -30,12 +30,12 @@ struct ICommand
 	virtual ~ICommand()		{}
 };
 
-class AddRectCommand : public ICommand
+class AddCommand : public ICommand
 {
-	std::vector<Shape*>& v;
+    std::vector<Shape*>& v;
 	public:
-	AddRectCommand(std::vector<Shape*>& v) : v(v) {}
-	void Execute() override { v.push_back(new Rect); }
+	AddCommand(std::vector<Shape*>& v) : v(v) {}
+	void Execute() override { v.push_back( CreateShape() ); }
 	bool CanUndo() override { return true; }
 	void Undo() override
 	{
@@ -43,21 +43,22 @@ class AddRectCommand : public ICommand
 		v.pop_back();
 		delete p;
 	}
+
+    virtual Shape* CreateShape() = 0;
 };
 
-class AddCircleCommand : public ICommand
+class AddRectCommand : public AddCommand
 {
-	std::vector<Shape*>& v;
 	public:
-	AddCircleCommand(std::vector<Shape*>& v) : v(v) {}
-	void Execute() override { v.push_back(new Circle); }
-	bool CanUndo() override { return true; }
-	void Undo() override
-	{
-		Shape* p = v.back();
-		v.pop_back();
-		delete p;
-	}
+	AddRectCommand(std::vector<Shape*>& v) : AddCommand(v) {}
+	Shape* CreateShape() override { return new Rect; }
+};
+
+class AddCircleCommand : public AddCommand
+{
+	public:
+	AddCircleCommand(std::vector<Shape*>& v) : AddCommand(v) {}
+	Shape* CreateShape() override { return new Circle; }
 };
 
 class DrawCommand : public ICommand
