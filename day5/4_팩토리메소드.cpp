@@ -1,7 +1,7 @@
-// 5_ÆÑÅä¸®¸Þ¼Òµå
+// 5_ï¿½ï¿½ï¿½ä¸®ï¿½Þ¼Òµï¿½
 #include <iostream>
 
-// ¸ðµç Á¾·ùÀÇ ÄÁÆ®·ÑÀº °øÅëÀÇ ±â¹Ý Å¬·¡½º ÇÊ¿ä
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 struct IButton
 {
 	virtual void Draw() = 0;
@@ -32,7 +32,7 @@ struct OSXEdit : public IEdit
 	void Draw() { std::cout << "Draw OSXButton" << std::endl; }
 };
 //--------------------------------------
-// Style ¿É¼Ç°ú »ó°ü¾øÀÌ Ç×»ó Windows ¸ð¾çÀÇ Dialog
+// Style ï¿½É¼Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×»ï¿½ Windows ï¿½ï¿½ï¿½ï¿½ï¿½ Dialog
 
 class WinDialog
 {
@@ -49,15 +49,22 @@ public:
 	}
 };
 
+class OSXDialog
+{
+public:
+	void init()
+	{
+		OSXButton* btn  = new OSXButton;
+		OSXEdit*   edit = new OSXEdit;
+
+		// btn->Move(); edit->Move();
+
+		btn->Draw();
+		edit->Draw();
+	}
+};
+
 int main(int argc, char** argv)
 {
 
 }
-
-
-
-
-
-
-
-

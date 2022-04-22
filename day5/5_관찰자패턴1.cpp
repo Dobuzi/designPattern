@@ -1,4 +1,3 @@
-//1_관찰자패턴1 - 94 page
 #include <iostream>
 #include <vector>
 
@@ -11,13 +10,12 @@ struct IGraph
 class Table
 {
 	std::vector<IGraph*> v;
-	int value; // table 의 data 값
+	int value;
 public:
 	void attach(IGraph* p) { v.push_back(p); }
 	void detach(IGraph* p) {}
 	void notify(int data)
 	{
-		// 등록된 모든 그래프에 알려준다.
 		for (auto p : v)
 			p->Update(data);
 	}
@@ -40,9 +38,24 @@ public:
 		std::cout << "Bar Graph : ";
 
 		for (int i = 0; i < n; i++)
-			std::cout << "*";
+			std::cout << "|";
 
 		std::cout << std::endl;
+	}
+};
+
+class PieGraph : public IGraph
+{
+	public:
+	void Update(int n) override
+	{
+		std::cout << "Pie Graph : ";
+
+		for (int i = 0; i < n; i++)
+			std::cout << "O";
+
+		std::cout << std::endl;
+
 	}
 };
 
@@ -50,6 +63,7 @@ int main()
 {
 	Table t;
 	PieGraph pg; t.attach(&pg);
+	BarGraph bg; t.attach(&bg);
 	t.edit();
 }
 

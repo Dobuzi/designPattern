@@ -51,3 +51,5 @@ int main()
 
 // Strategy Pattern : Change the policy of object
 // State Pattern    : Change the all action of object
+// Builder Pattern  : When making the complex shape of object
+// Decorator Pattern: Add function (Not change)
